@@ -33,11 +33,20 @@ export const Navbar = () => {
 
       <Link
         className={`${
-          pathname === "/adminProducts" && "text-red-600"
+          pathname === "/IniciarSesion" && "text-red-600"
         } hover:text-red-600 transition`}
-        to={"/adminProducts"}
-      >Publicar
+        to={"/IniciarSesion"}
+      >Iniciar sesión
       </Link>
+
+      <Link
+        className={`${
+          pathname === "/Registrarse" && "text-red-600"
+        } hover:text-red-600 transition`}
+        to={"/Registrarse"}
+      >Registrarse
+      </Link>
+
 
       <Link
         className={`${
