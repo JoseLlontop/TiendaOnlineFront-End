@@ -11,13 +11,10 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 600,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: '#5bc0de',
+  border: '12px solid #000 ',
   boxShadow: 24,
-  p: 4,
-};
-const campo = {
-  
+  p: 4, 
 };
 
 export default function BasicModal() {
@@ -37,34 +34,51 @@ export default function BasicModal() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style} >
-          <Typography fontFamily="Lucida" textAlign="center" fontSize="2rem">
+        <Box sx={style}>
+          <Typography fontFamily="Lucida" textAlign="center" fontSize="2rem" >
             Comprar Producto
           </Typography>
           <Typography id="modal-modal-description"sx={{ mt: 2 }}>
-            <Box marginBottom="2rem" fontSize="1.2rem" sx={campo} borderColor="grey">
-              <Box  marginBottom="2rem">
+            <Box  >
+              <Box   className='formulario'>
                 <label htmlFor="" >Nombre: </label>
-                <input type="text" id='nombre' className='campos' />
+                <input type="text" id='nombre' className='campos' placeholder='Ingrese su nombre'/>
               </Box>
-              <Box marginBottom="2rem">
+              <Box  className='formulario'>
                 <label htmlFor="">Apellido: </label>
-                <input type="text" id='apellido' className='campos'/>
+                <input type="text" id='apellido' className='campos' placeholder='Ingrese su apellido'/>
               </Box>
-              <Box marginBottom="2rem">
+              <Box className='formulario'>
                 <label htmlFor="">Email: </label>
-                <input type="email" id='email' className='campos'/>
+                <input type="email" id='email' className='campos' placeholder='Ingrese su email'/>
               </Box>
-              <Box marginBottom="2rem">
+              <Box className='formulario'>
                 <label htmlFor="">Numero de tarjeta:</label>
-                <input type="text" id='tarjeta-numero' className='campos'/>
+                <input type="text" id='tarjeta-numero' className='campos'placeholder='Ingrese su numero de tarjeta'/>
               </Box>
-              <Box>
+              <Box className='formulario'>
+                <label htmlFor="">Localidad: </label>
+                <select name="localidad" id="localidad" className='campos' defaultValue="default">
+                  <option value="default" disabled>Seleccione su localidad</option>
+                  <option value="buenosAires">Buenos Aires</option>
+                  <option value="catamarca">Catamarca</option>
+                  <option value="mendoza">Mendoza</option>
+                  <option value="cordoba">Cordoba</option>
+                  <option value="laRioja">La Rioja</option>
+                  <option value="tucuman">Tucuman</option>
+                  <option value="sanJuan">San juan</option>
+                  <option value="misiones">Misiones</option>
+                  <option value="rioNegro">Rio Negro</option>
+                  <option value="tierraDelFuego">Tierra Del Fuego</option>
+                  <option value="entreRios">Entre Ríos</option>
+                </select>
+              </Box>
+              <Box className='formulario'>
                 <label htmlFor="">Domicilio:</label>
-                <input type="text" id='domicilio' className='campos'/>
+                <input type="text" id='domicilio' className='campos'placeholder='Ingrese su domicilio'/>
               </Box>
             </Box>
-            <Box >
+            <Box>
                 <Button
                 variant='contained'
                 color="primary"

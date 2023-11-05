@@ -1,156 +1,17 @@
-.card-deck-scroll {
-    display: flex;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    padding-bottom: 15px;
-    position: relative;
-}
 
-.card-deck-scroll .card {
-    flex: 0 0 auto;
-    margin-right: 15px;
-    width: 300px;
-    text-align: center;
-    display: inline-block;
-    vertical-align: top;
-}
-
-.scroll-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: transparent;
-    border: none;
-    outline: none;
-    font-size: 24px;
-    cursor: pointer;
-    transition: opacity 0.3s ease;
-    z-index: 2;
-}
-
-.scroll-btn-left {
-    left: 0;
-}
-
-.scroll-btn-right {
-    right: 0;
-}
-
-.card-deck-scroll::-webkit-scrollbar {
-    display: none;
-}
-
-.card-deck-scroll .card-body {
-    overflow-y: auto;
-    max-height: 100%;
-}
-
-.card-expanded .card-body {
-    overflow-y: auto;
-    max-height: none;
-}
-
-.read-more-btn {
-    cursor: pointer;
-}
-
-.card-deck-scroll:hover .scroll-btn {
-    opacity: 1;
-}
-
-.card-deck-scroll .scroll-btn:active {
-    opacity: 0.5;
-}
-
-.card-deck-scroll .card-deck {
-    flex-wrap: nowrap;
-}
-
-.card-deck-scroll .card {
-    min-width: 18rem;
-}
-
-.card-deck-scroll .card-body {
-    overflow-y: hidden;
-    max-height: 100%;
-    white-space: normal;
-}
-
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-
-.content {
-    flex-grow: 1;
-}
-
-#calendar {
-    margin: 0 auto; /* Centra el calendario horizontalmente */
-}
-
-.container {
-    display: flex;
-    flex-direction: column;
-    min-height: 65%;
-}
-
-footer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding-top: 20px;
-}
-
-#logo-utn {
-    width: 150px;
-    margin-left: 30px;
-}
-
-#logo-ig {
-    width: 45px;
-}
-
-#logo-fb {
-    width: 35px;
-}
-
-.redes-linsi {
-    padding-right: 30px;
-}
-
-#reservas-pendientes {
-    margin-left: 40px;
-}
-
-.toastAceptar, .toastRechazar {
-    background-color: white;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-hr {
-   background-color: rgba(122, 119, 119, 0.527);
-   margin-left: 40px;
-   margin-right: 40px;
-}
 .campos{
     border: 3px solid;
+    width: 20rem;
 }
-.table {
-    width: 100%;
-    margin-top: 20px;
-    margin-left: 40px;
+.typo{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    text-align: center;
+    font-size: 200px;
+    text-decoration: underline;
 }
-
-.rechazar {
-    border: none;
-}
-
-.aceptar {
-    border: none;
+.formulario{
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+    border-color: gray;
+    border-radius: 50px;
 }
