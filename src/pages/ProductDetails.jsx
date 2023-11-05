@@ -1,18 +1,22 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
+import Modal from "../components/Modal";
+
 // context
-import { CartContext } from "../contexts/CartContext";
 import { ProductContext } from "../contexts/ProductContext";
 
 export const ProductDetails = () => {
   // obtener el id del producto por medio de la url
   const { id } = useParams();
   const { products } = useContext(ProductContext);
-  const { addToCart } = useContext(CartContext);
-
+  
+  //Creamos el modal de comprar un producto
+  // const [modal,setModal] = useState(false);
+  // const Toggle = () => setModal(!modal);
+  
+  
   // Obtener el producto basado en el id
   const product = products.find((item) => item.id === parseInt(id));
-
   if (!product) {
     return (
       <section className="h-screen flex justify-center items-center">
@@ -23,7 +27,6 @@ export const ProductDetails = () => {
 
   // Desestructurar el producto
   const { title, price, description, image } = product;
-
   return (
     <section className="pt-32 pb-12 lg:py-32 h-screen flex items-center">
       <div className="container mx-auto">
@@ -45,12 +48,9 @@ export const ProductDetails = () => {
               $ {price}
             </div>
             <p className="mb-8">{description}</p>
-            <button
-              onClick={() => addToCart(product, product.id)}
-              className="bg-primary py-4 px-8 text-white"
-            >
-              Agregar al carrito
-            </button>
+            
+            {/* <Modal show={modal} title="My Modal" close={Toggle}/> */}
+            <Modal></Modal>
           </div>
         </div>
       </div>

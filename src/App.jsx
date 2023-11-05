@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // Páginas
 import { Home, ProductDetails, Products, About, Contact, Error, IniciarSesion, Registrarse } from "./pages";
 // Componentes
-import { Sidebar, Header, Footer } from "./components";
+import { Header, Footer } from "./components";
 
 const App = () => {
   return (
@@ -25,7 +25,6 @@ const App = () => {
             <Route path="/Registrarse" element={<Registrarse />} />
             <Route path="*" element={<Error />} />
           </Routes>
-          <Sidebar />
           <Footer />
         </Router>
       </div>

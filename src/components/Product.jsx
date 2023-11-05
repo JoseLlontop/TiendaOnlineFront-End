@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 // iconos
 import { BsPlus, BsEyeFill } from "react-icons/bs";
 // context
-import { CartContext } from "../contexts/CartContext";
+//import { CartContext } from "../contexts/CartContext";
 
 export const Product = ({ product }) => {
   // Desestructuración de product
-  const { addToCart } = useContext(CartContext);
+  //const { addToCart } = useContext(CartContext);
   const { id, image, category, title, price } = product;
 
   return (
@@ -24,11 +24,7 @@ export const Product = ({ product }) => {
           </div>
           {/* Botones */}
           <div className="absolute top-6 -right-10 group-hover:right-1 p-2 flex flex-col items-center justify-center gap-y-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
-            <button onClick={() => addToCart(product, id)}>
-              <div className="flex justify-center items-center text-white w-12 h-12 bg-red-500">
-                <BsPlus className="text-3xl" />
-              </div>
-            </button>
+            
             <Link
               to={`/product/${id}`}
               className="w-12 h-12 bg-white flex justify-center items-center text-primary drop-shadow-xl"
