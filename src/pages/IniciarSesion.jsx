@@ -1,5 +1,12 @@
 import React from 'react';
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+
+
+const hardcodedUsuario = {
+  email: "jose@gmail.com",
+  password: "123456",
+};
 
 export const IniciarSesion = () => {
     const [email, setEmail] = useState("");
@@ -7,10 +14,19 @@ export const IniciarSesion = () => {
   
     const [errorInput, setErrorInput] = useState(false);
   
+    //Es un hook proporcionado por la librería React Router y en este caso se va a
+    //utilizar para redirigir al usuario a una página diferente después de una autenticación exitosa
+    const navigate = useNavigate();
+
     const handleSubmit = (e) => {
       e.preventDefault();
   
-      if ([email, password].includes("")) {
+      if (email === hardcodedUsuario.email && password === hardcodedUsuario.password) {
+        // Redirige al usuario a la página de contenido protegido
+        navigate("/CrudProducto");
+        
+      }else{ 
+        
         setErrorInput(true);
   
         setTimeout(() => {

@@ -2,7 +2,8 @@
 //en la pagina sin cargar una pagina completamente nueva
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // Páginas
-import { Home, ProductDetails, Products, About, Contact, Error, IniciarSesion, Registrarse } from "./pages";
+import { Home, ProductDetails, Products, About, Contact, Error, IniciarSesion, Registrarse  } from "./pages";
+import { CrudProducto } from "./pages/CrudProducto";
 // Componentes
 import { Header, Footer } from "./components";
 
@@ -20,6 +21,7 @@ const App = () => {
             {/*cuando la URL coincida con "/products", se mostrará el componente Products*/}
             <Route path="/products" element={<Products />} />
             <Route path="/about" element={<About />} />
+            <Route path="/CrudProducto" element={<CrudProducto/>} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/IniciarSesion" element={<IniciarSesion />} />
             <Route path="/Registrarse" element={<Registrarse />} />
