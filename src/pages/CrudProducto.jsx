@@ -5,7 +5,8 @@ import withReactContent from 'sweetalert2-react-content'
 import { show_alerta } from '../helpers/funcionSweetAlert'
 import { useFetchData } from "../hooks/useFetchData"
 import '../pages/pages.css'
-import { document } from 'postcss'
+import 'postcss';
+import axios from 'axios';
 
 export const CrudProducto = () => {
 
@@ -66,6 +67,97 @@ export const CrudProducto = () => {
     )
   }
 
+  const validar = () => {
+
+    var productoParametro;
+    var metodo;
+    var URL;
+
+    //Validamos los campos antes de enviar la solicitud
+    if (nombre.trim() == '') {
+      show_alerta('Escriba el nombre del producto', 'warning')
+    }
+    else if (precio.trim() == '') {
+      show_alerta('Escribe el precio del producto', 'warning')
+    }
+    else if (imagen.trim() == '') {
+      show_alerta('Escriba la URL de la imagen', 'warning')
+    }
+
+    else {
+      //Revisamos cual es la operacion actual
+      if (operacion == 1) { //1 es para guardar (POST)
+        //Creamos el objeto
+        productoParametro = { nombre: nombre.trim(), descripcion: descripcion.trim(), precio: precio.trim(), imagen: imagen.trim() }
+        metodo = 'POST'
+        URL = 'http://localhost:8080/api/productos'
+      }
+      else { //2 es para actualizar (PUT)
+        productoParametro = { id: id, nombre: nombre.trim(), descripcion: descripcion.trim(), precio: precio.trim(), imagen: imagen.trim() }
+        metodo = 'PUT'
+        URL = `http://localhost:8080/api/productos/${productoParametro.id}`
+      }
+      //Una vez que se asigne el parametro y el metodo de acuerdo a la operacion, enviamos la solicitud
+      enviarSolicitud(metodo, productoParametro, URL)
+    }
+  }
+
+  // Definición de la función enviarSolicitud
+  const enviarSolicitud = async (metodo, parametro, direccion) => {
+    // Realiza una solicitud usando axios
+    await axios({ method: metodo, url: direccion, data: parametro }).then(function (respuesta) {
+
+      // Verificar el código de estado HTTP
+      if (respuesta.status === 200) {
+        document.getElementById('btncerrar').click();
+        // Recargar los datos desde el servidor
+        if (metodo === 'DELETE') {
+          show_alerta('Produto eliminado', 'success')
+          document.getElementById('btncerrar').click()
+          setProductos(productos.filter(producto => producto.id !== id))
+
+        } else if (metodo === 'POST') {
+          // Si la operación es de agregar, actualiza el estado agregando el nuevo producto
+          show_alerta('Producto guardado', 'success')
+          document.getElementById('btncerrar').click()
+          setProductos([...productos, parametro])
+
+        } else {
+          // Si la operación es de agregar, actualiza el estado agregando el nuevo producto
+          show_alerta('Producto actualizado', 'success')
+          document.getElementById('btncerrar').click()
+          setProductos([...productos, parametro])
+        }
+      }
+    }).catch(function (error) {
+      // Si ocurre un error, muestra una alerta de error y loguea el error en la consola
+      show_alerta('Error en la solicitud', 'error');
+      console.log(error);
+    })
+  }
+
+  const deleteProducto = (id, nombre) => {
+    // Crea una instancia de SweetAlert2 con soporte para React
+    const MySwal = withReactContent(Swal)
+
+    // Muestra una alerta con el mensaje y el icono proporcionados y ...
+    MySwal.fire({
+      title: '¿Seguro de eliminar el producto' + nombre + ' ?',
+      icon: 'question',
+      text: 'No se podra dar marcha atras',
+      showCancelButton: true,
+      confirmButtonText: 'Si, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((respuesta) => {
+      if (respuesta.isConfirmed) {
+        setId(id)
+        enviarSolicitud('DELETE', { id: id }, `http://localhost:8080/api/productos/${id}`)
+      }
+      else {
+        show_alerta('El producto NO fue elimnado', 'info')
+      }
+    })
+  }
 
   return (
     <div className='CrudProductos'>
@@ -73,7 +165,7 @@ export const CrudProducto = () => {
         <div className='row mt-3'>
           <div className='col-md-4 offset-md-4'>
             <div className='d-grid mx-auto'>
-              <button onClick={()=> openModal(1)} className='btn btn-dark' data-bs-toggle="modal" data-bs-target="#modalProductos">
+              <button onClick={() => openModal(1)} className='btn btn-dark' data-bs-toggle="modal" data-bs-target="#modalProductos">
                 <i className='fa-solid fa-circle-plus'></i> Añadir
               </button>
             </div>
@@ -102,14 +194,14 @@ export const CrudProducto = () => {
                       <td>{producto.nombre}</td>
                       <td>{producto.descripcion}</td>
                       <td>${new Intl.NumberFormat("es-mx").format(producto.precio)}</td>
-                      <td>
-                        {/*Cuando hace click en el icono de editar se muestra con los valores del producto que quiere modificar*/}
-                        <button onClick={()=> openModal(2, producto.id, producto.nombre, producto.descripcion, producto.precio)}
-                        className='btn btn-warning' data-bs-toggle='modal' data-bs-target='#modalProductos'>
+                      <td className='d-flex align-items-center'>
+                        {/* Editar */}
+                        <button onClick={() => openModal(2, producto.id, producto.nombre, producto.descripcion, producto.precio, producto.imagen)}
+                          className='btn btn-warning me-2' data-bs-toggle='modal' data-bs-target='#modalProductos'>
                           <i className='fa-solid fa-edit'></i>
                         </button>
-                        &nbsp;
-                        <button className='btn btn-danger'>
+                        {/* Eliminar */}
+                        <button onClick={() => deleteProducto(producto.id, producto.nombre)} className='btn btn-danger'>
                           <i className='fa-solid fa-trash'></i>
                         </button>
                       </td>
@@ -122,7 +214,7 @@ export const CrudProducto = () => {
         </div>
       </div>
       {/* Ventana superpuesta que se utiliza para mostrar información adicional */}
-      <div id='modalProductos' className='modal fade' aria-hidde='true'>
+      <div id='modalProductos' className='modal fade' aria-hidden='true'>
         <div className='modal-dialog'>
           <div className='modal-content'>
             {/* Encabezado del modal */}
@@ -189,7 +281,7 @@ export const CrudProducto = () => {
                 ></input>
               </div>
               <div className='d-grid col-e mx-auto'>
-                <button className='btn btn-success'>
+                <button onClick={() => validar()} className='btn btn-success'>
                   <i className='fa-solid fa-floppy-disk'></i>&nbsp;&nbsp;Guardar
                 </button>
               </div>
@@ -197,11 +289,10 @@ export const CrudProducto = () => {
             <div className='modal-footer'>
               <button
                 type='button'
+                id='btncerrar'
                 className='btn btn-secondary'
                 data-bs-dismiss='modal'
-                style={{ backgroundColor: 'gray' }} /* Puedes ajustar el color según tus preferencias */
-              >
-                Cerrar
+                style={{ backgroundColor: 'gray' }}>Cerrar
               </button>
             </div>
 

@@ -3,7 +3,7 @@ import withReactContent from "sweetalert2-react-content";
 
 // Función que muestra una alerta usando la librería SweetAlert2
 // Recibe un mensaje, un icono y un elemento en el cual enfocarse después de mostrar la alerta
-export function show_alerta(mensaje, icono, foco){
+export function show_alerta(mensaje, icono, foco=''){
 
     // Llama a la función onfocus para enfocar el elemento específico, si se proporcionó
     onfocus(foco)
