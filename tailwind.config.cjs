@@ -22,6 +22,9 @@ module.exports = {
         primary: '#222222',
         secondary: '#F5E6E0',
       },
+      textColor: {
+        'black': '#000', // Define el color negro con el nombre 'black'
+        },
       backgroundImage: {
         hero: "url('./img/bg_hero.svg')",
       },

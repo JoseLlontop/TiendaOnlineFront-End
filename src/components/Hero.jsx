@@ -14,7 +14,7 @@ export const Hero = () => {
               tendencia
             </div>
             <h1 className="w-full text-[70px] leading-[1.1] font-light mb-4 uppercase">
-              Venta de otoño con estilo{" "}
+              Venta de ropa con estilo{" "}
               <span className="font-semibold">para Hombres y Mujeres</span>
             </h1>
             <Link

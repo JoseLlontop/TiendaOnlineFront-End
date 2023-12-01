@@ -53,7 +53,7 @@ export default function BasicModal() {
                 <input type="email" id='email' className='campos' placeholder='Ingrese su email'/>
               </Box>
               <Box className='formulario'>
-                <label htmlFor="">Numero de tarjeta:</label>
+                <label htmlFor="">Numero de tarjeta: </label>
                 <input type="text" id='tarjeta-numero' className='campos'placeholder='Ingrese su numero de tarjeta'/>
               </Box>
               <Box className='formulario'>
@@ -74,7 +74,7 @@ export default function BasicModal() {
                 </select>
               </Box>
               <Box className='formulario'>
-                <label htmlFor="">Domicilio:</label>
+                <label htmlFor="">Domicilio: </label>
                 <input type="text" id='domicilio' className='campos'placeholder='Ingrese su domicilio'/>
               </Box>
             </Box>
@@ -83,6 +83,7 @@ export default function BasicModal() {
                 variant='contained'
                 color="primary"
                 onClick={() => handleClose()}
+                style={{ marginRight: '8px' }} 
                 >
                   Cancelar
                 </Button>

@@ -5,7 +5,6 @@ import App from "./App";
 //import CartProvider from "./contexts/CartContext";
 import ProductProvider from "./contexts/ProductContext";
 import SidebarProvider from "./contexts/SidebarContext";
-import "bootstrap/dist/css/bootstrap.min.css"
 //Iconos
 import "@fortawesome/fontawesome-free/css/all.min.css"
 import "bootstrap/dist/js/bootstrap.bundle"
