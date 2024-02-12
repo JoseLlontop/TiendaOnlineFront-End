@@ -9,6 +9,10 @@ const Ul = styled.ul`
   li {
     padding: 18px 10px;
     border-bottom: 2px solid #f1f1f1;
+    // Estilo para el color del texto
+    a {
+      color: black;
+    }
   }
 
   @media (max-width: 768px) {
@@ -40,8 +44,7 @@ const RightNav = ({ open }) => {
         </Link>
       </li>
         <li>
-            <Link
-                className={`${
+            <Link className={`${
                 pathname === "/about" && "text-red-600"
                 } hover:text-red-600 transition`}
                 to={"/about"}
@@ -61,10 +64,10 @@ const RightNav = ({ open }) => {
       <li>
         <Link
             className={`${
-            pathname === "/IniciarSesion" && "text-red-600"
+            pathname === "/iniciarSesion" && "text-red-600"
             } hover:text-red-600 transition`}
-            to={"/IniciarSesion"}
-        >Iniciar sesión
+            to={"/iniciarSesion"}
+        >Gestionar Productos
         </Link>
       </li>
       <li>

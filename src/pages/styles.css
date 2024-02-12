@@ -4,7 +4,11 @@
 
 @layer base {
   body {
-    @apply font-primary text-primary;
+    @apply font-primary;
     color: #000; 
   }
+}
+
+.gestionProductos{
+    margin-top: 6%;
 }

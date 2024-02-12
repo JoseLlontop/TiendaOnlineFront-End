@@ -19,6 +19,7 @@ module.exports = {
     },
     extend: {
       colors: {
+        black: '#000',
         primary: '#222222',
         secondary: '#F5E6E0',
       },
@@ -26,7 +27,7 @@ module.exports = {
         'black': '#000', // Define el color negro con el nombre 'black'
         },
       backgroundImage: {
-        hero: "url('./img/bg_hero.svg')",
+        hero: "url('./img/fondoImagen.svg')",
       },
     },
   },

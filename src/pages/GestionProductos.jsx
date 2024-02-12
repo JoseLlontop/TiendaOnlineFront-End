@@ -7,12 +7,11 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "@fortawesome/fontawesome-free/css/all.min.css"
 import "bootstrap/dist/js/bootstrap.bundle"
 import { useFetchData } from "../hooks/useFetchData"
-import '../pages/pages.css'
 import 'postcss';
 import axios from 'axios';
 
 
-export const CrudProducto = () => {
+export const GestionProductos = () => {
 
   //Desustructuramos los parametros que estamos recibiendo:
   const { data, isLoading } = useFetchData("http://localhost:8080/api/productos")
@@ -164,7 +163,7 @@ export const CrudProducto = () => {
   }
 
   return (
-    <div className='CrudProductos'>
+    <div className='gestionProductos'>
       <div className='container-fluid'>
         <div className='row mt-3'>
           <div className='col-md-4 offset-md-4'>

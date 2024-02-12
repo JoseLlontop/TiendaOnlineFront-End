@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-// imagenes
 import model from "../img/model.png";
+import fondoImagen from "../img/fondoImagen.svg"; // Importa la imagen de fondo
 
 export const Hero = () => {
   return (
     <>
-      <section className="h-[800px] bg-hero bg-no-repeat bg-center bg-cover py-24 mt-20">
+      <section className="h-[800px] bg-no-repeat bg-center bg-cover py-24 mt-[110px]" style={{ backgroundImage: `url(${fondoImagen})` }}>
         <div className="container mx-auto flex justify-around h-full">
           {/* texto */}
           <div className="flex flex-col justify-center">
@@ -32,4 +32,4 @@ export const Hero = () => {
       </section>
     </>
   );
-};
+}

@@ -4,7 +4,7 @@ import App from "./App";
 // contexts
 import ProductProvider from "./contexts/ProductContext";
 import SidebarProvider from "./contexts/SidebarContext";
-import "./pages/index.css";
+import "./pages/styles.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <SidebarProvider>
