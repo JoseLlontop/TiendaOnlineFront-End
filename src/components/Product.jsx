@@ -2,12 +2,9 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 // iconos
 import { BsPlus, BsEyeFill } from "react-icons/bs";
-// context
-//import { CartContext } from "../contexts/CartContext";
 
 export const Product = ({ product }) => {
-  // Desestructuración de product
-  //const { addToCart } = useContext(CartContext);
+  
   const { id, nombre, descripcion, precio, imagen } = product;
 
   return (

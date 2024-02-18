@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Cookies from 'js-cookie'; // Importa la biblioteca para manejar cookies
 import { useNavigate } from 'react-router-dom';
 
-export const IniciarSesion = () => {
+export const ValidacionVenta = () => {
     
     const navigate = useNavigate();
-    //const [proveedorRegistrado, setProveedorRegistrado] = useState(false);
 
     const handleNavigateToValidacion = () => {
         // Redirige al usuario al sistema de validación
@@ -18,19 +16,6 @@ export const IniciarSesion = () => {
 
     };
 
-    /* Verifica si el usuario ha completado el primer paso (registro como proveedor)
-    // basado en la presencia de la cookie
-    const verificarRegistroProveedor = () => {
-        const proveedorRegistradoCookie = Cookies.get("proveedorRegistrado"); // Obtiene el valor de la cookie
-        if (proveedorRegistradoCookie) {
-            setProveedorRegistrado(true);
-        }
-    };
-    // Al cargar el componente, verifica si el usuario ha completado el registro como proveedor
-    useEffect(() => {
-        verificarRegistroProveedor();
-    }, []);*/
-
     return (
         <>
             <div className="mt-[140px] sm:mt-20 max-w-screen-md mx-auto p-5">
@@ -42,22 +27,22 @@ export const IniciarSesion = () => {
             </div>
 
             <div className="mb-4">
-              <p className="font-bold text-lg text-gray-800 mb-2">Pasos para poder gestionar productos:</p>
+              <p className="font-bold text-lg text-gray-800 mb-2">Pasos para poder comprar un producto:</p>
               <ol className="list-decimal ml-8">
-                  <li>Regístrate como proveedor.</li>
+                  <li>Regístrate como cliente.</li>
                     <p className="text-sm text-gray-600 mb-2.5">
                       Nota: Esta opcion solo de debera realizar una unica vez.
                     </p>
                   <li>Regístrate en el sistema de validación de personas.
                       <p className="text-sm text-gray-600 mb-2">
-                      Nota: Esta opcion se debera realizar siempre que quiera acceder a la gestion de producto.
+                      Nota: Esta opcion se debera realizar siempre que quiera acceder a la compra un producto .
                       </p>
                   </li>
               </ol>
             </div>
          
              
-            <p className="font-bold text-lg text-gray-800 mb-3 text-center">Regístrate como proveedor</p>
+            <p className="font-bold text-lg text-gray-800 mb-3 text-center">Regístrate como cliente</p>
 
             <div className="mb-4 flex justify-center">
                 <button

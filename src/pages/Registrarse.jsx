@@ -1,44 +1,91 @@
 import React, { useState } from "react";
-import Cookies from 'js-cookie'; // Importa la biblioteca para manejar cookies
+import axios from 'axios';
+//import Cookies from 'js-cookie'; Importa la biblioteca para manejar cookies
 
 export const Registrarse = () => {
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [lastName, setLastname] = useState("");
     const [rol, setRol] = useState("");
-
+    const [message, setMessage] = useState("");
     const [errorInput, setErrorInput] = useState(false);
 
     const handleSubmit = (e) => {
-      e.preventDefault();
+        e.preventDefault();
 
-      if ([email, name, lastName, rol].includes("")) {
-          setErrorInput(true);
+        if ([email, name, lastName].includes("")) {
+            setErrorInput(true);
+            setTimeout(() => {
+                setErrorInput(false);
+            }, 5000);
 
-          setTimeout(() => {
-              setErrorInput(false);
-          }, 5000);
-      } else {
+        } else {
 
-          if (rol == "proveedor") {
-            // Si todos los campos están completos, crea la cookie para indicar el registro como proveedor
-            Cookies.set('proveedorRegistrado', true);
-        }
+            const usuario = {
+                nombre: name,
+                apellido: lastName,
+                email: email
+            };
         
-          //Lógica para enviar los datos de registro al servidor
-      }
-  };
+            if (rol === "proveedor") {
+                axios.post('http://localhost:8080/api/proveedores', {
+                    usuario: usuario
+                })
+                .then(response => {
+                    setMessage('Proveedor registrado exitosamente');
+
+                    setTimeout(() => {
+                        window.location.reload(); // Recargar la página 
+                    }, 7000);
+                })
+                .catch(error => {
+                    setMessage('Error al registrar proveedor');
+                    console.error('Error:', error);
+                });
+
+            } else if (rol === "cliente") {
+                axios.post('http://localhost:8080/api/clientes', {
+                    usuario: usuario
+                })
+                .then(response => {
+                    setMessage('Cliente registrado exitosamente');
+
+                    setTimeout(() => {
+                        window.location.reload(); // Recargar la página 
+                    }, 7000);
+                })
+                .catch(error => {
+                    setMessage('Error al registrar cliente');
+                    console.error('Error:', error);
+                });
+            }
+        }
+
+        setTimeout(() => {
+            window.location.reload(); // Recargar la página 
+        }, 5000);
+    };
 
     return (
         <>
             <div className="mt-[140px] sm:mt-20 max-w-screen-md mx-auto p-5">
+
+                {message && (
+                        <div className={`${message.includes('exitosamente') ? 'bg-green-500 text-white font-medium text-center py-2 rounded mb-3' :
+                        'bg-red-500 text-white font-medium text-center py-2 rounded mb-3'}`}>
+                            {message}
+                        </div>
+                    )}
+
+
                 {errorInput && (
-                    <div className="bg-red-500 text-white font-medium text-center py-2 rounded mb-5">
+                    <div className="bg-red-500 text-white font-medium text-center py-2 rounded mb-3">
                         <strong>¡Error!</strong>
                         <br />
                         Tienes que llenar todos los campos.
                     </div>
                 )}
+
                 <div className="text-center mb-10">
                     <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight text-gray-900">
                         Regis<span className="text-indigo-600">trarse</span>

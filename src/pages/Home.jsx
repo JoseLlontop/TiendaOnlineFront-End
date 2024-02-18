@@ -2,24 +2,59 @@ import { useContext, useEffect, useState } from "react";
 import { ProductContext } from "../contexts/ProductContext";
 import { Hero, Product } from "../components";
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const Home = () => {
+
   const { products } = useContext(ProductContext);
+  const navigate = useNavigate();
   const location = useLocation();
-  const [userData, setUserData] = useState(null);
+  const [personaData, setPersonaData] = useState(null);
 
   const CLIENTE_ID = "BNFI-DFDF-DFDF-DF45";
   const CLIENTE_SECRET = "miContraseña";
 
+  const textoIncriptado = "";
+
+  //Parameto del renaper que recibimos en la URL
   const obtenerParametroDeURL = () => {
     const params = new URLSearchParams(location.search);
     return params.get('parametro');
   };
 
-  /*useEffect(() => {
+  //Realizamos después de que el componente ha sido renderizado
+  useEffect(() => {
+
+    //VERIFICACION
+
+    // Llamar a una de mis apis
+    fetch("http://localhost:8080/api/desencriptarJwt", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        textoIncriptado
+      })
+    })
+    .then(response => response.json())
+    .then(datoDesencriptados => {
+
+      setPersonaData(datoDesencriptados); // Almacenar los datos de la persona en el estado
+      console.log(datoDesencriptados)
+      console.log(datoDesencriptados.tipo)
+    
+    })
+    .catch(error => {
+       console.error("Error al llamar a la API de desencriptar: ", error);
+    });
+
+
+
     const parametro = obtenerParametroDeURL();
-    if (parametro) {
-      // Llamar a la API
+
+    if (parametro != null) {
+      // Llamar a la API que nos provee el Renaper
       fetch("api/Auth/loguearJWT", {
         method: "POST",
         headers: {
@@ -31,36 +66,56 @@ export const Home = () => {
           parametro
         })
       })
+
       .then(response => response.json())
       .then(data => {
+
         // Verificar si la llamada fue exitosa y decodificar el JWT
         if (data.exito) {
-          const decodedData = jwt.verify(data.datos, 'tuClavePublica'); 
-          setUserData(decodedData); // Almacenar los datos decodificados en el estado
-        } else {
-          console.error("Error al llamar a la API:", data.mensaje);
-        }
-      })
+
+          const textoIncriptado = data.datos;
+
+          // Llamar a una de mis apis
+          fetch("http://localhost:8080/api/desencriptarJwt", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              textoIncriptado
+            })
+          })
+
+          .then(response => response.json())
+          .then(datoDesencriptados => {
+
+            setPersonaData(datoDesencriptados); // Almacenar los datos de la persona en el estado
+
+            if (datoDesencriptados.tipo === "proveedor") {
+              navigate("/gestionProductos");
+            }
+
+            if (datoDesencriptados.tipo === "cliente") {
+              navigate("/agregar-ruta-para-cliente");
+            }
+
+          })
+          //Error de mi api
+          .catch(error => {
+            console.error("Error al llamar a la API de desencriptar: ", error);
+          });
+
+        }})
+        //Error de la api del Renaper
       .catch(error => {
-        console.error("Error al llamar a la API:", error);
+        console.error("Error al llamar a la API del Renaper: ", error);
       });
     }
-  }, [location.search]);*/
+  }, [location.search]);
 
   return (
     <>
       <Hero />
-      {userData && (
-        <section className="py-16">
-          <div className="container mx-auto">
-            <h1 className="uppercase mb-6 font-bold text-2xl">
-              Bienvenido, {userData.nombre} {userData.apellido}
-            </h1>
-            <p>Email: {userData.email}</p>
-            <p>Estado crediticio: {userData.estadoCrediticio}</p>
-          </div>
-        </section>
-      )}
       <section className="py-16">
         <div className="container mx-auto">
           <h1 className="uppercase mb-6 font-bold text-2xl">
