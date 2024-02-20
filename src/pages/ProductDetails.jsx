@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
-import Modal from "../components/Modal";
+import { ModalCompra } from "../components/Modal";
 
 // context
 import { ProductContext } from "../contexts/ProductContext";
@@ -50,7 +50,7 @@ export const ProductDetails = () => {
             <p className="mb-8">{descripcion}</p>
             
             {/* <Modal show={modal} title="My Modal" close={Toggle}/> */}
-            <Modal></Modal>
+            <ModalCompra></ModalCompra>
           </div>
         </div>
       </div>

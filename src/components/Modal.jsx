@@ -2,10 +2,12 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { Link } from "react-router-dom";
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import { useNavigate } from 'react-router-dom';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 
@@ -20,12 +22,63 @@ const style = {
   p: 4, 
 };
 
-export default function BasicModal() {
+
+export const ModalCompra = () => {
   // Estado para controlar si el modal está abierto o cerrado
+  const handleSubmit = async (e) => {
+    const [formData, setFormData] = useState({
+      nombre: '',
+      apellido: '',
+      email: '',
+      tarjetanumero: '',
+      localidad: "",
+      domicilio: ""
+    });
+    e.preventDefault();
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({ ...formData, [name]: value });
+    };
+    const [message, setMessage] = useState('');
+    try {
+      // Enviar los datos al servidor del broker
+      const response = await fetch('URL_DEL_BROKER', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+  
+      const data = await response.json();
+      
+      // Verificar si la transacción fue exitosa
+      if (response.ok) {
+        setMessage('Transacción exitosa');
+      } else {
+        setMessage(data.message); // En caso de error, mostrar el mensaje del servidor
+      }
+    } catch (error) {
+      console.error('Error al procesar la transacción:', error);
+      setMessage('Error al procesar la transacción. Por favor, inténtelo de nuevo más tarde.');
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
   const [open, setOpen] = React.useState(false);
 
+  const navigate = useNavigate();
+
+    const handleNavigateToValidacion = () => {
+        // Redirige al usuario al sistema de validación
+        navigate("/ValidacionVenta");
+    };
   // Función para abrir el modal
   const handleOpen = () => setOpen(true);
+
 
   // Función para cerrar el modal
   const handleClose = () => setOpen(false);
@@ -33,8 +86,8 @@ export default function BasicModal() {
   return (
     <div>
       {/* Botón para abrir el modal */}
+      <Button onClick={handleNavigateToValidacion} variant='contained' color='primary' size='large' className='font-medium'>Comprar producto</Button>
       <Button onClick={handleOpen} variant='contained' color='primary' size='large' className='font-medium'>Comprar producto</Button>
-      
       {/* Modal */}
       <Modal open={open}>
         <Box sx={style}>
@@ -44,11 +97,11 @@ export default function BasicModal() {
           </Typography>
 
           {/* Formulario dentro del modal */}
-          <form>
-            <TextField id="nombre" label="Nombre" fullWidth margin="normal" />
-            <TextField id="apellido" label="Apellido" fullWidth margin="normal" />
-            <TextField id="email" label="Email" type="email" fullWidth margin="normal" />
-            <TextField id="tarjeta-numero" label="Número de tarjeta" fullWidth margin="normal" />
+          <form onSubmit={handleSubmit}>
+            <TextField id="nombre" label="Nombre" fullWidth margin="normal" required />
+            <TextField id="apellido" label="Apellido" fullWidth margin="normal" required/>
+            <TextField id="email" label="Email" type="email" fullWidth margin="normal" required/>
+            <TextField id="tarjetaNumero" label="Número de tarjeta" fullWidth margin="normal" required/>
             
             {/* Selector de localidad */}
             <FormControl fullWidth margin="normal">

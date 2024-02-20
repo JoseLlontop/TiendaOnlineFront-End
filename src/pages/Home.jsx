@@ -96,7 +96,7 @@ export const Home = () => {
             }
 
             if (datoDesencriptados.tipo === "cliente") {
-              navigate("/agregar-ruta-para-cliente");
+              navigate("/FormularioVenta");
             }
 
           })
