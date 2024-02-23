@@ -10,9 +10,6 @@ export const ProductDetails = () => {
   const { id } = useParams();
   const { products } = useContext(ProductContext);
   
-  //Creamos el modal de comprar un producto
-  // const [modal,setModal] = useState(false);
-  // const Toggle = () => setModal(!modal);
   
   
   // Obtener el producto basado en el id

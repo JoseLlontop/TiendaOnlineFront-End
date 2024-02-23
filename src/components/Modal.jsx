@@ -86,8 +86,8 @@ export const ModalCompra = () => {
   return (
     <div>
       {/* Botón para abrir el modal */}
-      <Button onClick={handleNavigateToValidacion} variant='contained' color='primary' size='large' className='font-medium'>Comprar producto</Button>
-      <Button onClick={handleOpen} variant='contained' color='primary' size='large' className='font-medium'>Comprar producto</Button>
+      <Button onClick={handleNavigateToValidacion} variant='contained' color='primary' size='large' className='font-medium'>Comprar productos</Button>
+      {/* <Button onClick={handleOpen} variant='contained' color='primary' size='large' className='font-medium'>Comprar producto</Button> */}
       {/* Modal */}
       <Modal open={open}>
         <Box sx={style}>
