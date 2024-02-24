@@ -21,6 +21,7 @@ export const FormularioVenta = () =>{
     let ActualDate = `${dia}-${mes}-${año}`;
     const [selectedProduct, setSelectedProduct] = useState('');
     const [productos, setProductos] = useState([]);
+    const [clienteID, setClienteID] = useState();
 
 
       useEffect(() => {
@@ -35,71 +36,95 @@ export const FormularioVenta = () =>{
       }, []);
 
 
-    const handleSubmit = (e) => {
+      const handleSubmit = async (e) => {
         e.preventDefault();
         const productoSeleccionado = productos.find((prod) => prod.id === parseInt(selectedProduct));
-
+    
         const descripcionProducto = productoSeleccionado.descripcion;
-
+    
         // Expresión regular para encontrar el CUIL
         const cuilRegex = /Cuil:\s*([\d-]+)/;
         const cuilMatch = descripcionProducto.match(cuilRegex);
         const cuil_proveedor = cuilMatch ? cuilMatch[1] : null;
-
+    
         // Expresión regular para encontrar el CBU
         const cbuRegex = /CBU\s*para\s*pago:\s*([\d\s]+)/;
         const cbuMatch = descripcionProducto.match(cbuRegex);
         const cbu_proveedor = cbuMatch ? cbuMatch[1].replace(/\s/g, '') : null;
-
-        console.log(cuil_proveedor)
-        console.log(cbu_proveedor)
-
-        // Aquí podrías enviar los datos de la transacción al servidor
-        if ([email, name, lastName, domicilio, localidad, cbu,cuil].includes("")) {
+    
+        console.log("Cuil del proveedor: ", cuil_proveedor)
+        console.log("CBU del proveedor: ", cbu_proveedor)
+    
+        if ([email, name, lastName, domicilio, localidad, cbu, cuil].includes("")) {
             setErrorInput(true);
             setTimeout(() => {
                 setErrorInput(false);
             }, 5000);
-
         } else {
+            
+            try {
+                // Realizar la solicitud para buscar el cliente
+                const response = await axios.get('http://localhost:8080/api/clientes/buscar', {
+                    params: {
+                        nombre: name, 
+                        apellido: lastName, 
+                        email: email 
+                    }
+                });
+    
+                // Obtener el ID del cliente desde la respuesta
+                const clienteIDEncontrado = response.data;
+                console.log('ID del cliente encontrado:', clienteIDEncontrado);
+    
+                // Armar el objeto de transacción
+                const transaction = {
+                    origin_cbu: cbu,
+                    amount: productoSeleccionado.precio,
+                    destiny_cbu: cbu_proveedor,
+                    motive: "Compra de prducto",
+                    number: null,
+                    origin_cuil: cuil,
+                    destination_cuil: cuil_proveedor
+                };
+    
+                // Realizar la solicitud para la transacción
+                const transactionResponse = await axios.post('/api/transaccion', transaction);
+    
+                if (transactionResponse.data === true) {
 
-            //Armo la venta
-            const venta ={
-                fecha: ActualDate,
-                monto_total: productoSeleccionado.precio,
-                producto_id: productoSeleccionado.id,
-                direccion_entrega: domicilio
-            };
-            console.log(productoSeleccionado.precio);
-            console.log(productoSeleccionado.id);
-            console.log(ActualDate);
+                    // Obtener la fecha actual
+                    const fechaActual = new Date();
 
-            axios.post('http://localhost:8080/api/ventas', {
-                    venta: venta
-                })
-                .then(response => {
+                    // Formatear la fecha como 'yyyy-MM-dd'
+                    const formattedDate = fechaActual.toISOString().split('T')[0];
+
+                    // Armar la venta
+                    const venta ={
+                        fecha: formattedDate,
+                        monto_total: productoSeleccionado.precio,
+                        direccion_entrega: domicilio,
+                        cliente: { usuario_ID: clienteIDEncontrado },
+                        producto: { id: productoSeleccionado.id }
+                    };
+    
+                    console.log("Venta:", venta);
+    
+                    // Realizar la solicitud para crear la venta
+                    await axios.post('http://localhost:8080/api/ventas', venta);
+    
                     setMessage('Venta registrada exitosamente');
-
+    
                     setTimeout(() => {
                         window.location.reload(); // Recargar la página 
                     }, 7000);
-                })
-                .catch(error => {
-                    setMessage('Error al registrar venta');
-                    console.error('Error:', error);
-                });
-
-            const transaction = {
-                origin_cbu: cbu,
-                origin_cuil:cuil,
-                destiny_cbu: cbu_proveedor,
-                destination_cuil: cuil_proveedor
-            };
+                } else {
+                    setMessage('Error en la transacción');
+                }
+            } catch (error) {
+                setMessage('Error al registrar venta');
+                console.error('Error:', error);
+            }
         }
-
-        // setTimeout(() => {
-        //     window.location.reload();
-        // }, 5000);
     };
     
     return (
