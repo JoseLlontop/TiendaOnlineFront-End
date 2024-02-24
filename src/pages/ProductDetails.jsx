@@ -24,6 +24,9 @@ export const ProductDetails = () => {
 
   // Desestructurar el producto
   const { nombre, descripcion, precio, imagen } = product;
+
+  // Dividir la descripción en líneas usando el salto de línea como separador
+  const lineasDescripcion = descripcion.split('\n');
   return (
     <section className="pt-32 pb-12 lg:py-32 h-screen flex items-center">
       <div className="container mx-auto">
@@ -44,8 +47,11 @@ export const ProductDetails = () => {
             <div className="text-xl text-red-500 font-medium mb-6">
               $ {precio}
             </div>
-            <p className="mb-8">{descripcion}</p>
-            
+            {/* Descripción debajo del título y el precio */}
+            <p className="mb-8" style={{ whiteSpace: 'pre-line' }}>
+              {descripcion}
+            </p>
+  
             {/* <Modal show={modal} title="My Modal" close={Toggle}/> */}
             <ModalCompra></ModalCompra>
           </div>
@@ -53,4 +59,4 @@ export const ProductDetails = () => {
       </div>
     </section>
   );
-};
+}

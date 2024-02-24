@@ -11,8 +11,8 @@ export const Home = () => {
   const location = useLocation();
   const [personaData, setPersonaData] = useState(null);
 
-  const CLIENTE_ID = "BNFI-DFDF-DFDF-DF45";
-  const CLIENTE_SECRET = "miContraseña";
+  const CLIENTE_ID = "87d8814e-0b95-47bb-a7a8-60ff4ee37d34";
+  const CLIENTE_SECRET = "rentail1";
 
   const textoIncriptado = "";
 
@@ -50,25 +50,30 @@ export const Home = () => {
     });
 
 
-
     const parametro = obtenerParametroDeURL();
+
+    console.log(parametro)
 
     if (parametro != null) {
       // Llamar a la API que nos provee el Renaper
-      fetch("api/Auth/loguearJWT", {
+      fetch("https://colosal.duckdns.org:15001/SRVP/api/Auth/loguearJWT", {
         method: "POST",
+        mode: "no-cors",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          CLIENTE_ID,
-          CLIENTE_SECRET,
-          parametro
+          clienteId: CLIENTE_ID,
+          clientSecret: CLIENTE_SECRET,
+          authorizationCode: parametro
         })
       })
-
+   
       .then(response => response.json())
       .then(data => {
+
+        //Retorno de datos del Renaper 
+        console.log(data);
 
         // Verificar si la llamada fue exitosa y decodificar el JWT
         if (data.exito) {

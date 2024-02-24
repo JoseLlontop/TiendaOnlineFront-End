@@ -7,6 +7,12 @@ export const Product = ({ product }) => {
   
   const { id, nombre, descripcion, precio, imagen } = product;
 
+  // Encontrar el índice del primer punto en la descripción
+  const primerPuntoIndex = descripcion.indexOf('.');
+
+  // Obtener la descripción hasta el primer punto
+  const descripcionHastaPrimerPunto = primerPuntoIndex !== -1 ? descripcion.substring(0, primerPuntoIndex + 1) : descripcion;
+
   return (
     <div>
       <div className="border border-[#e4e4e4] h-[300px] mb-4 relative overflow-hidden group transition">
@@ -36,8 +42,11 @@ export const Product = ({ product }) => {
         <Link to={`/product/${id}`}>
           <h2 className="font-semibold mb-1">{nombre}</h2>
         </Link>
-        <p className="text-gray-600">{descripcion}</p> {/* Agregado el campo de descripción */}
         <div className="font-semibold">$ {precio}</div>
+         {/* Descripción hasta el primer punto */}
+          <p className="mb-8" style={{ whiteSpace: 'pre-line' }}>
+          {descripcionHastaPrimerPunto}
+          </p>
       </div>
     </div>
   );

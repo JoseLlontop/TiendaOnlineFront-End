@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from 'axios';
 import { ProductContext } from "../contexts/ProductContext";
+
 export const FormularioVenta = () =>{
+
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
     const [lastName, setLastname] = useState("");
@@ -11,6 +13,7 @@ export const FormularioVenta = () =>{
     const [domicilio,setDomicilio] = useState("");
     const [message, setMessage] = useState("");
     const [errorInput, setErrorInput] = useState(false);
+
     let fecha = new Date();
     let dia = fecha.getDate();
     let mes = fecha.getMonth() + 1;
@@ -18,6 +21,8 @@ export const FormularioVenta = () =>{
     let ActualDate = `${dia}-${mes}-${año}`;
     const [selectedProduct, setSelectedProduct] = useState('');
     const [productos, setProductos] = useState([]);
+
+
       useEffect(() => {
         // Llamada a la API para obtener la lista de productos
         axios.get("http://localhost:8080/api/productos")
@@ -28,9 +33,27 @@ export const FormularioVenta = () =>{
             console.error('Error al obtener los productos:', error);
           });
       }, []);
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const productoSeleccionado = productos.find((prod) => prod.id === parseInt(selectedProduct));
+
+        const descripcionProducto = productoSeleccionado.descripcion;
+
+        // Expresión regular para encontrar el CUIL
+        const cuilRegex = /Cuil:\s*([\d-]+)/;
+        const cuilMatch = descripcionProducto.match(cuilRegex);
+        const cuil_proveedor = cuilMatch ? cuilMatch[1] : null;
+
+        // Expresión regular para encontrar el CBU
+        const cbuRegex = /CBU\s*para\s*pago:\s*([\d\s]+)/;
+        const cbuMatch = descripcionProducto.match(cbuRegex);
+        const cbu_proveedor = cbuMatch ? cbuMatch[1].replace(/\s/g, '') : null;
+
+        console.log(cuil_proveedor)
+        console.log(cbu_proveedor)
+
         // Aquí podrías enviar los datos de la transacción al servidor
         if ([email, name, lastName, domicilio, localidad, cbu,cuil].includes("")) {
             setErrorInput(true);
@@ -39,6 +62,8 @@ export const FormularioVenta = () =>{
             }, 5000);
 
         } else {
+
+            //Armo la venta
             const venta ={
                 fecha: ActualDate,
                 monto_total: productoSeleccionado.precio,
@@ -48,6 +73,7 @@ export const FormularioVenta = () =>{
             console.log(productoSeleccionado.precio);
             console.log(productoSeleccionado.id);
             console.log(ActualDate);
+
             axios.post('http://localhost:8080/api/ventas', {
                     venta: venta
                 })
@@ -62,10 +88,12 @@ export const FormularioVenta = () =>{
                     setMessage('Error al registrar venta');
                     console.error('Error:', error);
                 });
+
             const transaction = {
                 origin_cbu: cbu,
                 origin_cuil:cuil,
-
+                destiny_cbu: cbu_proveedor,
+                destination_cuil: cuil_proveedor
             };
         }
 
@@ -115,7 +143,7 @@ export const FormularioVenta = () =>{
                         {selectedProduct && (
             <>
                         <p>Producto: {productos.find((prod) => prod.id === parseInt(selectedProduct)).nombre}</p>
-                        <p className="ml-12">Precio: ${productos.find((prod) => prod.id === parseInt(selectedProduct)).precio}</p>
+                        <p className="ml-12 mb-4">Precio: ${productos.find((prod) => prod.id === parseInt(selectedProduct)).precio}</p>
                         
                         <div className="w-full px-3">
                             <label

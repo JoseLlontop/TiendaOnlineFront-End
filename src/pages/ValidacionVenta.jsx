@@ -7,7 +7,7 @@ export const ValidacionVenta = () => {
 
     const handleNavigateToValidacion = () => {
         // Redirige al usuario al sistema de validación
-        navigate("/ruta-del-sistema-de-validacion");
+        window.location.href = "https://colosal.duckdns.org:15001/SRVP/?client=rentail";
     };
 
     const handleNavigateToRegistro = () => {
