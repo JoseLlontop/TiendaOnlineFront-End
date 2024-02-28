@@ -20,6 +20,7 @@ export const FormularioVenta = () =>{
     let año = fecha.getFullYear();
     let ActualDate = `${dia}-${mes}-${año}`;
     const [selectedProduct, setSelectedProduct] = useState('');
+    const [selectedBank, setSelectedBank] = useState('');
     const [productos, setProductos] = useState([]);
     const [clienteID, setClienteID] = useState();
 
@@ -75,20 +76,25 @@ export const FormularioVenta = () =>{
                 // Obtener el ID del cliente desde la respuesta
                 const clienteIDEncontrado = response.data;
                 console.log('ID del cliente encontrado:', clienteIDEncontrado);
+                console.log(selectedBank);
     
                 // Armar el objeto de transacción
                 const transaction = {
                     origin_cbu: cbu,
                     amount: productoSeleccionado.precio,
-                    destiny_cbu: cbu_proveedor,
-                    motive: "Compra de prducto",
+                    destination_cbu: cbu_proveedor,
+                    motive: "Compra de producto",
                     number: null,
                     origin_cuil: cuil,
                     destination_cuil: cuil_proveedor
                 };
     
                 // Realizar la solicitud para la transacción
-                const transactionResponse = await axios.post('/api/transaccion', transaction);
+                const transactionResponse = await axios.post('https://bank-tomorrow.onrender.com/transaction', transaction);
+                
+                
+                
+                
     
                 if (transactionResponse.data === true) {
 
@@ -188,7 +194,7 @@ export const FormularioVenta = () =>{
                                 
                             />
                         
-                    </div>
+                        </div>
 
                     
 
@@ -233,7 +239,22 @@ export const FormularioVenta = () =>{
                         
                     </div>
 
-                    
+                    <div className="w-full px-3">
+                            <label
+                                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                htmlFor="grid-cbu"
+                            >
+                                Seleccionar Banco:
+                            </label>
+                            <select 
+                            value={selectedBank} 
+                            onChange={(e) => setSelectedBank(e.target.value)}
+                            className=" block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                                <option value="" disabled>Selecciona un banco</option>
+                                <option value="Tomorrow Onrender">Tomorrow Onrender</option>
+                            </select>
+                        
+                    </div>
                         <div className="w-full px-3">
                             <label
                                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
