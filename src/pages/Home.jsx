@@ -3,6 +3,7 @@ import { ProductContext } from "../contexts/ProductContext";
 import { Hero, Product } from "../components";
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 export const Home = () => {
 
@@ -11,111 +12,59 @@ export const Home = () => {
   const location = useLocation();
   const [personaData, setPersonaData] = useState(null);
 
-  const CLIENTE_ID = "87d8814e-0b95-47bb-a7a8-60ff4ee37d34";
-  const CLIENTE_SECRET = "rentail1";
-
-  const textoIncriptado = "";
-
   //Parameto del renaper que recibimos en la URL
   const obtenerParametroDeURL = () => {
     const params = new URLSearchParams(location.search);
-    return params.get('parametro');
+    return params.get('queryParametro');
   };
+
+  // Recuperar el tipo de usuario almacenado en localStorage
+  const tipoUsuario = localStorage.getItem('tipoUsuario');
 
   //Realizamos después de que el componente ha sido renderizado
   useEffect(() => {
 
-    //VERIFICACION
+    const parametro = obtenerParametroDeURL();
+
+    const parametrosSolicitud = {
+      parametroUsuario: parametro,
+      tipoIngresoSistema: tipoUsuario
+    };
+
+    console.log(parametrosSolicitud);
 
     // Llamar a una de mis apis
-    fetch("http://localhost:8080/api/desencriptarJwt", {
+    fetch("http://localhost:8080/api/retornarDatos", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({
-        textoIncriptado
-      })
+      body: JSON.stringify(parametrosSolicitud)
     })
+
     .then(response => response.json())
-    .then(datoDesencriptados => {
+    .then(datosPersona => {
 
-      setPersonaData(datoDesencriptados); // Almacenar los datos de la persona en el estado
-      console.log(datoDesencriptados)
-      console.log(datoDesencriptados.tipo)
-    
+      console.log(datosPersona);
+
+      setPersonaData(datosPersona); // Almacenar los datos de la persona en el estado
+
+      console.log(personaData)
+
+      if (datosPersona.tipo === "proveedor") {
+        navigate("/gestionProductos");
+      }
+
+      if (datosPersona.tipo === "cliente") {
+        navigate("/FormularioVenta");
+      }
+
     })
+    //Error de la api
     .catch(error => {
-       console.error("Error al llamar a la API de desencriptar: ", error);
+      console.error("Error al llamar a la API de obtener datos del usuario: ", error);
     });
-
-
-    const parametro = obtenerParametroDeURL();
-
-    console.log(parametro)
-
-    if (parametro != null) {
-      // Llamar a la API que nos provee el Renaper
-      fetch("https://colosal.duckdns.org:15001/SRVP/api/Auth/loguearJWT", {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          clienteId: CLIENTE_ID,
-          clientSecret: CLIENTE_SECRET,
-          authorizationCode: parametro
-        })
-      })
-   
-      .then(response => response.json())
-      .then(data => {
-
-        //Retorno de datos del Renaper 
-        console.log(data);
-
-        // Verificar si la llamada fue exitosa y decodificar el JWT
-        if (data.exito) {
-
-          const textoIncriptado = data.datos;
-
-          // Llamar a una de mis apis
-          fetch("http://localhost:8080/api/desencriptarJwt", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              textoIncriptado
-            })
-          })
-
-          .then(response => response.json())
-          .then(datoDesencriptados => {
-
-            setPersonaData(datoDesencriptados); // Almacenar los datos de la persona en el estado
-
-            if (datoDesencriptados.tipo === "proveedor") {
-              navigate("/gestionProductos");
-            }
-
-            if (datoDesencriptados.tipo === "cliente") {
-              navigate("/FormularioVenta");
-            }
-
-          })
-          //Error de mi api
-          .catch(error => {
-            console.error("Error al llamar a la API de desencriptar: ", error);
-          });
-
-        }})
-        //Error de la api del Renaper
-      .catch(error => {
-        console.error("Error al llamar a la API del Renaper: ", error);
-      });
-    }
+    
   }, [location.search]);
 
   return (

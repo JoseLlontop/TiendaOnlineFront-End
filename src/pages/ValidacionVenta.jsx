@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 export const ValidacionVenta = () => {
     
     const navigate = useNavigate();
 
     const handleNavigateToValidacion = () => {
+
+        // Almacena el tipo de usuario en localStorage
+        localStorage.setItem('tipoUsuario', 'cliente');
+
         // Redirige al usuario al sistema de validación
-        window.location.href = "https://colosal.duckdns.org:15001/SRVP/?client=rentail";
+        window.location.href = "https://colosal.duckdns.org:15001/SRVP/?client=shopify";
+        
     };
 
     const handleNavigateToRegistro = () => {

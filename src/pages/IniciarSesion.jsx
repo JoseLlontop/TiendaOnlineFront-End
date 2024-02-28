@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import Cookies from 'js-cookie'; // Importa la biblioteca para manejar cookies
 import { useNavigate } from 'react-router-dom';
 
 export const IniciarSesion = () => {
     
     const navigate = useNavigate();
-    //const [proveedorRegistrado, setProveedorRegistrado] = useState(false);
 
     const handleNavigateToValidacion = () => {
+
+        // Almacena el tipo de usuario en localStorage
+        localStorage.setItem('tipoUsuario', 'proveedor');
+
         // Redirige al usuario al sistema de validación
-        window.location.href = "https://colosal.duckdns.org:15001/SRVP/?client=rentail";
+        window.location.href = "https://colosal.duckdns.org:15001/SRVP/?client=shopify";  
     };
 
     const handleNavigateToRegistro = () => {
@@ -17,19 +19,6 @@ export const IniciarSesion = () => {
         navigate("/Registrarse");
 
     };
-
-    /* Verifica si el usuario ha completado el primer paso (registro como proveedor)
-    // basado en la presencia de la cookie
-    const verificarRegistroProveedor = () => {
-        const proveedorRegistradoCookie = Cookies.get("proveedorRegistrado"); // Obtiene el valor de la cookie
-        if (proveedorRegistradoCookie) {
-            setProveedorRegistrado(true);
-        }
-    };
-    // Al cargar el componente, verifica si el usuario ha completado el registro como proveedor
-    useEffect(() => {
-        verificarRegistroProveedor();
-    }, []);*/
 
     return (
         <>
