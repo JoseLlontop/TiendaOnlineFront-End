@@ -95,17 +95,19 @@ export const FormularioVenta = () =>{
                 // Realizar la solicitud para la transacción solo si el banco seleccionado es "Tomorrow Onrender"
                 if (selectedBank === "Tomorrow Onrender") {
                     
-                    const response = await fetch("https://bank-tomorrow.onrender.com/transaction", {
-                        mode: 'no-cors',
+                    const response = await fetch("http://localhost:8080/api/realizarTransaccion", {
                         method: 'POST',
                         headers: {
-                            'Access-Control-Allow-Origin': '*',
                             "Content-Type": "application/json"
                         },
                         body: JSON.stringify(transaction)
                     });
 
-                    if (response.status === 200) {
+                    console.log(response);
+
+                    if (response.ok == true) {
+
+                        console.log("La transaccion fue exitosa");
 
                         const datos = await response.json();
 
