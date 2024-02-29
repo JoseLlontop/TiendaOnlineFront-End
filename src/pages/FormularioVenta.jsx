@@ -62,70 +62,88 @@ export const FormularioVenta = () =>{
                 setErrorInput(false);
             }, 5000);
         } else {
-            
+    
             try {
                 // Realizar la solicitud para buscar el cliente
                 const response = await axios.get('http://localhost:8080/api/clientes/buscar', {
                     params: {
-                        nombre: name, 
-                        apellido: lastName, 
-                        email: email 
+                        nombre: name,
+                        apellido: lastName,
+                        email: email
                     }
                 });
     
                 // Obtener el ID del cliente desde la respuesta
                 const clienteIDEncontrado = response.data;
                 console.log('ID del cliente encontrado:', clienteIDEncontrado);
+    
                 console.log(selectedBank);
     
                 // Armar el objeto de transacción
                 const transaction = {
                     origin_cbu: cbu,
-                    amount: productoSeleccionado.precio,
+                    amount: parseFloat(productoSeleccionado.precio),
                     destination_cbu: cbu_proveedor,
                     motive: "Compra de producto",
                     number: null,
-                    origin_cuil: cuil,
-                    destination_cuil: cuil_proveedor
+                    origin_cuil: parseInt(cuil),
+                    destination_cuil: parseInt(cuil_proveedor)
                 };
-    
-                // Realizar la solicitud para la transacción
-                const transactionResponse = await axios.post('https://bank-tomorrow.onrender.com/transaction', transaction);
-                
-                
-                
-                
-    
-                if (transactionResponse.data === true) {
 
-                    // Obtener la fecha actual
-                    const fechaActual = new Date();
+                console.log(transaction)
+    
+                // Realizar la solicitud para la transacción solo si el banco seleccionado es "Tomorrow Onrender"
+                if (selectedBank === "Tomorrow Onrender") {
+                    
+                    const response = await fetch("https://bank-tomorrow.onrender.com/transaction", {
+                        mode: 'no-cors',
+                        method: 'POST',
+                        headers: {
+                            'Access-Control-Allow-Origin': '*',
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(transaction)
+                    });
 
-                    // Formatear la fecha como 'yyyy-MM-dd'
-                    const formattedDate = fechaActual.toISOString().split('T')[0];
+                    if (response.status === 200) {
 
-                    // Armar la venta
-                    const venta ={
-                        fecha: formattedDate,
-                        monto_total: productoSeleccionado.precio,
-                        direccion_entrega: domicilio,
-                        cliente: { usuario_ID: clienteIDEncontrado },
-                        producto: { id: productoSeleccionado.id }
-                    };
+                        const datos = await response.json();
+
+                        console.log(datos);
     
-                    console.log("Venta:", venta);
+                        // Si la transacción es exitosa, proceder con el alta de la venta
+                        // Obtener la fecha actual
+                        const fechaActual = new Date();
     
-                    // Realizar la solicitud para crear la venta
-                    await axios.post('http://localhost:8080/api/ventas', venta);
+                        // Formatear la fecha como 'yyyy-MM-dd'
+                        const formattedDate = fechaActual.toISOString().split('T')[0];
     
-                    setMessage('Venta registrada exitosamente');
+                        // Armar la venta
+                        const venta = {
+                            fecha: formattedDate,
+                            monto_total: productoSeleccionado.precio,
+                            direccion_entrega: domicilio,
+                            cliente: { usuario_ID: clienteIDEncontrado },
+                            producto: { id: productoSeleccionado.id }
+                        };
     
-                    setTimeout(() => {
-                        window.location.reload(); // Recargar la página 
-                    }, 7000);
+                        console.log("Venta:", venta);
+    
+                        // Realizar la solicitud para crear la venta
+                        await axios.post('http://localhost:8080/api/ventas', venta);
+    
+                        setMessage('Venta registrada exitosamente');
+    
+                        setTimeout(() => {
+                            window.location.reload(); // Recargar la página 
+                        }, 7000);
+                    } else {
+                        setMessage('Error en la transacción');
+                    }
                 } else {
-                    setMessage('Error en la transacción');
+                    setMessage('Banco seleccionado incorrecto');
                 }
+    
             } catch (error) {
                 setMessage('Error al registrar venta');
                 console.error('Error:', error);
