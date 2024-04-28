@@ -113,6 +113,7 @@ export const GestionProductos = () => {
       // Verificar el código de estado HTTP
       if (respuesta.status === 200) {
         document.getElementById('btncerrar').click();
+
         // Recargar los datos desde el servidor
         if (metodo === 'DELETE') {
           show_alerta('Produto eliminado', 'success')
@@ -162,6 +163,35 @@ export const GestionProductos = () => {
     })
   }
 
+  // Función para manejar la carga de archivos
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    //Envio el archivo al backend para procesarlo y obtener la URL pública de la imagen
+    try {
+
+      //Esto nos permite construir fácilmente un conjunto de pares clave/valor que se pueden enviar en una solicitud HTTP
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('http://localhost:8080/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      
+      // Actualiza el estado de la imagen con la URL pública obtenida del backend
+      setImagen(data.url);
+
+      console.log("Imagen recibida y guardada correctamente en el BUCKET: ", data.url);
+
+    } catch (error) {
+      console.error('Error al cargar la imagen:', error);
+    }
+  };
+
   return (
     <div className='gestionProductos'>
       <div className='container-fluid'>
@@ -192,7 +222,7 @@ export const GestionProductos = () => {
                 {/* Cuerpo de la tabla */}
                 <tbody className='table-group-divider'>
                   {productos.map((producto, i) => (
-                    <tr key={producto.id}>
+                    <tr key={producto.nombre}>
                       <td>{(i + 1)}</td>
                       <td>{producto.nombre}</td>
                       <td>{producto.descripcion}</td>
@@ -216,6 +246,8 @@ export const GestionProductos = () => {
           </div>
         </div>
       </div>
+
+
       {/* Ventana superpuesta que se utiliza para mostrar información adicional */}
       <div id='modalProductos' className='modal fade' aria-hidden='true'>
         <div className='modal-dialog'>
@@ -275,14 +307,14 @@ export const GestionProductos = () => {
               <div className='input-group mb-3'>
                 <span className='input-group-text'><i className='fa-solid fa-image'></i></span>
                 <input
-                  type='text'
+                  type='file'
                   id='imagen'
                   className='form-control'
-                  placeholder='Imagen'
-                  value={imagen}
-                  onChange={(e) => setImagen(e.target.value)}
+                  accept='image/*' // Acepta cualquier tipo de imagen
+                  onChange={handleFileChange} // Maneja el archivo
                 ></input>
               </div>
+
               <div className='d-grid col-e mx-auto'>
                 <button onClick={() => validar()} className='btn btn-success'>
                   <i className='fa-solid fa-floppy-disk'></i>&nbsp;&nbsp;Guardar
