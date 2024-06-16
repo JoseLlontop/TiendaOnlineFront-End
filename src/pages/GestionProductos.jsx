@@ -13,8 +13,10 @@ import axios from 'axios';
 
 export const GestionProductos = () => {
 
+  const URL = import.meta.env.VITE_API_URL;
+
   //Desustructuramos los parametros que estamos recibiendo:
-  const { data, isLoading } = useFetchData("http://localhost:8080/api/productos")
+  const { data, isLoading } = useFetchData(`${URL}/api/productos`)
 
   //Manejar el estado en componentes funcionales
   const [productos, setProductos] = useState([])
@@ -93,12 +95,12 @@ export const GestionProductos = () => {
         //Creamos el objeto
         productoParametro = { nombre: nombre.trim(), descripcion: descripcion.trim(), precio: precio.trim(), imagen: imagen.trim() }
         metodo = 'POST'
-        URL = 'http://localhost:8080/api/productos'
+        URL = `${URL}/api/productos`
       }
       else { //2 es para actualizar (PUT)
         productoParametro = { id: id, nombre: nombre.trim(), descripcion: descripcion.trim(), precio: precio.trim(), imagen: imagen.trim() }
         metodo = 'PUT'
-        URL = `http://localhost:8080/api/productos/${productoParametro.id}`
+        URL = `${URL}/api/productos/${productoParametro.id}`
       }
       //Una vez que se asigne el parametro y el metodo de acuerdo a la operacion, enviamos la solicitud
       enviarSolicitud(metodo, productoParametro, URL)
@@ -155,7 +157,7 @@ export const GestionProductos = () => {
     }).then((respuesta) => {
       if (respuesta.isConfirmed) {
         setId(id)
-        enviarSolicitud('DELETE', { id: id }, `http://localhost:8080/api/productos/${id}`)
+        enviarSolicitud('DELETE', { id: id }, `${URL}/api/productos/${id}`)
       }
       else {
         show_alerta('El producto NO fue elimnado', 'info')
@@ -175,7 +177,7 @@ export const GestionProductos = () => {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await fetch('http://localhost:8080/api/upload', {
+      const response = await fetch(`${URL}/api/upload`, {
         method: 'POST',
         body: formData,
       });

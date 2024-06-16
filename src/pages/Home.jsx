@@ -12,6 +12,8 @@ export const Home = () => {
   const location = useLocation();
   const [personaData, setPersonaData] = useState(null);
 
+  const URL = import.meta.env.VITE_API_URL;
+
   //Parameto del renaper que recibimos en la URL
   const obtenerParametroDeURL = () => {
     const params = new URLSearchParams(location.search);
@@ -34,7 +36,7 @@ export const Home = () => {
     console.log(parametrosSolicitud);
 
     // Llamar a una de mis apis
-    fetch("http://localhost:8080/api/retornarDatos", {
+    fetch(`${URL}/api/retornarDatos`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

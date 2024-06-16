@@ -6,10 +6,12 @@ const ProductProvider = ({ children }) => {
 
   const [products, setProducts] = useState([]);
 
+  const URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
 
     const fetchProducts = async () => {
-      const response = await fetch("http://localhost:8080/api/productos");
+      const response = await fetch(`${URL}/api/productos`);
       const data = await response.json();
       setProducts(data);
     };

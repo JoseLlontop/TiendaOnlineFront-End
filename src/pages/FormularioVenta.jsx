@@ -24,10 +24,11 @@ export const FormularioVenta = () =>{
     const [productos, setProductos] = useState([]);
     const [clienteID, setClienteID] = useState();
 
+    const URL = import.meta.env.VITE_API_URL;
 
       useEffect(() => {
         // Llamada a la API para obtener la lista de productos
-        axios.get("http://localhost:8080/api/productos")
+        axios.get(`${URL}/api/productos`)
           .then(response => {
             setProductos(response.data);
           })
@@ -65,7 +66,7 @@ export const FormularioVenta = () =>{
     
             try {
                 // Realizar la solicitud para buscar el cliente
-                const response = await axios.get('http://localhost:8080/api/clientes/buscar', {
+                const response = await axios.get(`${URL}/api/clientes/buscar`, {
                     params: {
                         nombre: name,
                         apellido: lastName,
@@ -95,7 +96,7 @@ export const FormularioVenta = () =>{
                 // Realizar la solicitud para la transacción solo si el banco seleccionado es "Tomorrow Onrender"
                 if (selectedBank === "Tomorrow Onrender") {
                     
-                    const response = await fetch("http://localhost:8080/api/realizarTransaccion", {
+                    const response = await fetch(`${URL}/realizarTransaccion`, {
                         method: 'POST',
                         headers: {
                             "Content-Type": "application/json"
@@ -132,7 +133,7 @@ export const FormularioVenta = () =>{
                         console.log("Venta:", venta);
     
                         // Realizar la solicitud para crear la venta
-                        await axios.post('http://localhost:8080/api/ventas', venta);
+                        await axios.post(`${URL}/api/ventas`, venta);
     
                         setMessage('Venta registrada exitosamente');
     

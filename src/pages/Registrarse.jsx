@@ -10,6 +10,8 @@ export const Registrarse = () => {
     const [message, setMessage] = useState("");
     const [errorInput, setErrorInput] = useState(false);
 
+    const URL = import.meta.env.VITE_API_URL;
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -28,7 +30,7 @@ export const Registrarse = () => {
             };
         
             if (rol === "proveedor") {
-                axios.post('http://localhost:8080/api/proveedores', {
+                axios.post(`${URL}/api/proveedores`, {
                     usuario: usuario
                 })
                 .then(response => {
@@ -44,7 +46,7 @@ export const Registrarse = () => {
                 });
 
             } else if (rol === "cliente") {
-                axios.post('http://localhost:8080/api/clientes', {
+                axios.post(`${URL}/api/clientes`, {
                     usuario: usuario
                 })
                 .then(response => {
