@@ -24,6 +24,9 @@ export const Home = () => {
   const tipoUsuario = localStorage.getItem('tipoUsuario');
 
   //Realizamos después de que el componente ha sido renderizado
+  
+  //El sistema externo puede que ya no este disponible
+  /* 
   useEffect(() => {
 
     const parametro = obtenerParametroDeURL();
@@ -68,6 +71,7 @@ export const Home = () => {
     });
     
   }, [location.search]);
+*/
 
   return (
     <>
