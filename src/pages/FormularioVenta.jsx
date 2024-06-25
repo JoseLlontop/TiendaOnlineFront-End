@@ -26,16 +26,20 @@ export const FormularioVenta = () =>{
 
     const URL = import.meta.env.VITE_API_URL;
 
-      useEffect(() => {
+    useEffect(() => {
         // Llamada a la API para obtener la lista de productos
-        axios.get(`${URL}/api/productos`)
-          .then(response => {
-            setProductos(response.data);
-          })
-          .catch(error => {
-            console.error('Error al obtener los productos:', error);
-          });
-      }, []);
+        axios.get(`${URL}/api/productos`, {
+          headers: {
+            'ngrok-skip-browser-warning': 'true'
+          }
+        })
+        .then(response => {
+          setProductos(response.data);
+        })
+        .catch(error => {
+          console.error('Error al obtener los productos:', error);
+        });
+      }, [URL]);
 
 
       const handleSubmit = async (e) => {
@@ -68,11 +72,14 @@ export const FormularioVenta = () =>{
                 // Realizar la solicitud para buscar el cliente
                 const response = await axios.get(`${URL}/api/clientes/buscar`, {
                     params: {
-                        nombre: name,
-                        apellido: lastName,
-                        email: email
+                      nombre: name,
+                      apellido: lastName,
+                      email: email
+                    },
+                    headers: {
+                      'ngrok-skip-browser-warning': 'true'
                     }
-                });
+                  });
     
                 // Obtener el ID del cliente desde la respuesta
                 const clienteIDEncontrado = response.data;
@@ -133,7 +140,11 @@ export const FormularioVenta = () =>{
                         console.log("Venta:", venta);
     
                         // Realizar la solicitud para crear la venta
-                        await axios.post(`${URL}/api/ventas`, venta);
+                        await axios.post(`${URL}/api/ventas`, venta, {
+                            headers: {
+                              'ngrok-skip-browser-warning': 'true'
+                            }
+                          });
     
                         setMessage('Venta registrada exitosamente');
     

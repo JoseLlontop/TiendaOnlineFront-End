@@ -32,6 +32,10 @@ export const Registrarse = () => {
             if (rol === "proveedor") {
                 axios.post(`${URL}/api/proveedores`, {
                     usuario: usuario
+                }, {
+                    headers: {
+                        'ngrok-skip-browser-warning': 'true'
+                      }
                 })
                 .then(response => {
                     setMessage('Proveedor registrado exitosamente');
@@ -48,7 +52,11 @@ export const Registrarse = () => {
             } else if (rol === "cliente") {
                 axios.post(`${URL}/api/clientes`, {
                     usuario: usuario
-                })
+                  }, {
+                    headers: {
+                      'ngrok-skip-browser-warning': 'true'
+                    }
+                  })
                 .then(response => {
                     setMessage('Cliente registrado exitosamente');
 

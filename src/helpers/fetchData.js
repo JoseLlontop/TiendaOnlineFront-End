@@ -1,13 +1,23 @@
 export const fetchData = async (URL) => {
   try {
-    const response = await fetch(URL)
-    //Transaformamos a un JSON
-    const data = await response.json()
-    return{
-        data,
-        isLoding: false
-    }
+    const response = await fetch(URL, {
+      method: 'GET',
+      headers: {
+        'ngrok-skip-browser-warning': 'true'
+      }
+    });
+
+    // Transformamos a un JSON
+    const data = await response.json();
+    return {
+      data,
+      isLoding: false
+    };
   } catch (e) {
-    console.error(e)
+    console.error(e);
+    return {
+      data: [],
+      isLoding: false
+    };
   }
-}
+};

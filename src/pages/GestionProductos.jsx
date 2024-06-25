@@ -82,10 +82,17 @@ export const GestionProductos = () => {
   }
 
   const enviarSolicitud = async (metodo, parametro, direccion) => {
-    await axios({ method: metodo, url: direccion, data: parametro }).then((respuesta) => {
+    await axios({
+      method: metodo,
+      url: direccion,
+      data: parametro,
+      headers: {
+        'ngrok-skip-browser-warning': 'true'
+      }
+    }).then((respuesta) => {
       if (respuesta.status === 200) {
         document.getElementById('btncerrar').click();
-
+  
         if (metodo === 'DELETE') {
           show_alerta('Producto eliminado', 'success');
           setProductos(productos.filter(producto => producto.id !== id));
@@ -102,6 +109,7 @@ export const GestionProductos = () => {
       console.log(error);
     });
   }
+  
 
   const deleteProducto = (id, nombre) => {
     const MySwal = withReactContent(Swal);
@@ -134,6 +142,9 @@ export const GestionProductos = () => {
       const response = await fetch(`${URL}/api/upload`, {
         method: 'POST',
         body: formData,
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
       });
 
       const data = await response.json();
