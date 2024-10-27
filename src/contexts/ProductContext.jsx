@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import { mockProducts } from "./data"; // Importa los productos harcodeados
 
 export const ProductContext = createContext();
 
@@ -10,7 +11,9 @@ const ProductProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const response = await fetch(`${URL}/api/productos`, {
+      
+      // Produccion 
+      /*const response = await fetch(`${URL}/api/productos`, {
         headers: {
           'ngrok-skip-browser-warning': 'true'
         }
@@ -21,8 +24,13 @@ const ProductProvider = ({ children }) => {
         return;
       }
   
-      const data = await response.json();
+      const data = await response.json(); 
       setProducts(data);
+      */
+
+      // Portafolio
+      setProducts(mockProducts);
+      
     };
   
     fetchProducts();

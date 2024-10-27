@@ -9,11 +9,13 @@ import "bootstrap/dist/js/bootstrap.bundle"
 import { useFetchData } from "../hooks/useFetchData"
 import 'postcss';
 import axios from 'axios';
+import { mockProducts } from "../contexts/data"; // Importa los productos harcodeados
 
 export const GestionProductos = () => {
   const URL = import.meta.env.VITE_API_URL;
 
-  const { data, isLoading } = useFetchData(`${URL}/api/productos`);
+  //Produccion
+  //const { data, isLoading } = useFetchData(`${URL}/api/productos`);
 
   const [productos, setProductos] = useState([]);
   const [id, setId] = useState("");
@@ -24,12 +26,18 @@ export const GestionProductos = () => {
   const [operacion, setOperacion] = useState(1);
   const [titulo, setTitulo] = useState("");
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (!isLoading) {
       setProductos(data);
       console.log(data);
     }
   }, [data, isLoading]);
+  */
+
+  //Solo para portafolio
+  useEffect(() => {
+    setProductos(mockProducts); 
+  })
 
   const openModal = (op, id, nombre, descripcion, precio, imagen) => {
     setId('');
